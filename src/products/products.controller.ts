@@ -28,7 +28,11 @@ export class ProductsController {
 
   @Get()
   findAllProducts(@Query() paginationDto: PaginationDto) {
-    return this.client.send({ cmd: 'find_all_products' }, paginationDto);
+    return this.client.send({ cmd: 'find_all_products' }, paginationDto).pipe(
+      catchError((err) => {
+        throw new RpcException(err);
+      }),
+    );
   }
 
   @Get(':id')

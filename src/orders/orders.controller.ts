@@ -22,18 +22,23 @@ export class OrdersController {
   @Post()
   async create(@Body() createOrderDto: CreateOrderDto) {
     try {
-      const product = await firstValueFrom(
+      return await firstValueFrom(
         this.client.send('createOrder', createOrderDto || {}),
       );
-      return product;
     } catch (error) {
       throw new RpcException(error);
     }
   }
 
   @Get()
-  findAll(@Query() orderPaginationDto: OrderPaginationDto) {
-    return this.client.send('findAllOrder', orderPaginationDto);
+  async findAll(@Query() orderPaginationDto: OrderPaginationDto) {
+    try {
+      return await firstValueFrom(
+        this.client.send('findAllOrder', orderPaginationDto),
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
   @Get(':status')
